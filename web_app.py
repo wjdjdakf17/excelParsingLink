@@ -48,7 +48,7 @@ HTML_TEMPLATE = '''
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>🚀 링크 자동 클릭 시스템</title>
+    <title>🚀 Choi Rocket: I don't give a shit !! 🖕</title>
     <style>
         * {
             margin: 0;
@@ -269,7 +269,7 @@ HTML_TEMPLATE = '''
 <body>
     <div class="container">
         <div class="header">
-            <h1 class="title">🚀 링크 자동 클릭 시스템</h1>
+            <h1 class="title">🚀 Choi Rocket: I don't give a shit !! 🖕</h1>
             <p class="subtitle">엑셀 파일의 링크를 자동으로 클릭하여 버튼을 실행합니다</p>
         </div>
         
@@ -651,6 +651,116 @@ def start_automation():
         process_status['status'] = 'error'
         process_status['error'] = error_msg
         return jsonify({'success': False, 'error': error_msg})
+
+@app.route('/webhook/automation', methods=['POST'])
+def webhook_automation():
+    """Vercel에서 오는 자동화 요청 웹훅"""
+    global found_links, process_status
+    
+    try:
+        data = request.get_json()
+        if not data or 'links' not in data:
+            return jsonify({'success': False, 'error': '잘못된 데이터입니다.'})
+        
+        found_links = data['links']
+        analysis_results = data.get('analysis_results', [])
+        
+        log_message(f"🔄 Vercel에서 {len(found_links)}개 링크 자동화 요청 받음")
+        
+        # 자동화 상태 초기화
+        process_status = {
+            'status': 'connecting',
+            'progress': 0,
+            'current_link': '',
+            'total_links': len(found_links),
+            'processed_links': 0,
+            'logs': process_status.get('logs', []),
+            'error': None
+        }
+        
+        # 백그라운드에서 자동화 실행
+        import threading
+        automation_thread = threading.Thread(target=run_automation_background)
+        automation_thread.daemon = True
+        automation_thread.start()
+        
+        return jsonify({
+            'success': True,
+            'message': f'{len(found_links)}개 링크 자동화 시작됨',
+            'status_url': '/status'
+        })
+        
+    except Exception as e:
+        log_message(f"❌ 웹훅 처리 오류: {str(e)}")
+        return jsonify({'success': False, 'error': str(e)})
+
+def run_automation_background():
+    """백그라운드에서 자동화 실행"""
+    global process_status
+    
+    try:
+        log_message("🚀 백그라운드 자동화 시작!")
+        
+        # Chrome 설정
+        log_message("🔗 기존 브라우저에 연결 시도...")
+        
+        options = Options()
+        options.add_experimental_option("debuggerAddress", "127.0.0.1:9222")
+        options.add_argument("--no-sandbox")
+        options.add_argument("--disable-dev-shm-usage")
+        options.add_argument("--disable-blink-features=AutomationControlled")
+        
+        try:
+            driver = webdriver.Chrome(options=options)
+            log_message("✅ 기존 브라우저 연결 성공!")
+        except Exception as e:
+            error_msg = f"❌ 브라우저 연결 실패: {str(e)}"
+            log_message(error_msg)
+            process_status['status'] = 'error'
+            process_status['error'] = error_msg
+            return
+        
+        process_status['status'] = 'running'
+        
+        # 각 링크 처리
+        for i, link in enumerate(found_links):
+            try:
+                process_status['current_link'] = f"링크 {i+1}/{len(found_links)} 처리 중..."
+                process_status['progress'] = (i / len(found_links)) * 100
+                
+                log_message(f"🌐 링크 {i+1} 접속: {link[:80]}{'...' if len(link) > 80 else ''}")
+                
+                driver.get(link)
+                time.sleep(3)  # 페이지 로드 대기
+                
+                # 자동 로그인 시도
+                try_auto_login(driver)
+                
+                # 알림 처리
+                handle_alerts(driver)
+                
+                # 버튼 클릭 시도
+                click_target_button(driver)
+                
+                process_status['processed_links'] = i + 1
+                log_message(f"✅ 링크 {i+1} 처리 완료")
+                
+                time.sleep(2)  # 다음 링크로 이동 전 대기
+                
+            except Exception as e:
+                error_msg = f"링크 {i+1} 처리 중 오류: {str(e)}"
+                log_message(f"⚠️ {error_msg}")
+                continue  # 다음 링크 계속 처리
+        
+        driver.quit()
+        process_status['status'] = 'completed'
+        log_message("🎉 백그라운드 자동화 완료!")
+        
+    except Exception as e:
+        error_msg = f"백그라운드 자동화 중 전체 오류: {str(e)}"
+        log_message(f"❌ {error_msg}")
+        process_status['status'] = 'error'
+        process_status['error'] = error_msg
 
 def try_auto_login(driver):
     """자동 로그인 시도"""
