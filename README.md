@@ -1,111 +1,170 @@
-# 🚀 링크 자동 클릭 프로그램
+# 🚀 Excel Link Auto Clicker - 완전 자동화 시스템
 
-엑셀 파일에서 링크를 자동으로 추출하고 지정된 버튼을 자동으로 클릭하는 웹 애플리케이션입니다.
+친구가 **브라우저에서 바로** 완전 자동화를 실행할 수 있는 시스템입니다!
 
-## ✨ 주요 기능
+## 🎯 **친구용 사용법 (5분 완성!)**
 
-- 📁 **엑셀 파일 업로드**: .xlsx, .xls 파일 지원
-- 📊 **자동 링크 분석**: 모든 시트에서 HTTP 링크 자동 추출
-- 🎯 **스마트 버튼 클릭**: ID, 클래스, 태그명으로 버튼 지정
-- 📈 **실시간 모니터링**: 진행 상황과 로그를 실시간으로 확인
-- 🎮 **완전한 제어**: 언제든지 시작/중지 가능
+### 🌐 **방법 1: GitHub Codespaces (무료 + 추천)**
 
-## 🛠️ 기술 스택
+1. **GitHub 계정 만들기** (무료)
 
-- **Backend**: Flask (Python)
-- **Frontend**: HTML, CSS, JavaScript
-- **자동화**: Selenium WebDriver
-- **데이터 처리**: Pandas, OpenPyXL
+   - https://github.com 접속
+   - **Sign up** 클릭
+   - 이메일, 비밀번호 입력
 
-## 🚀 로컬 실행 방법
+2. **이 링크 클릭** 👉 **https://github.com/wjdjdakf17/excelParsingLink**
 
-### 1. 저장소 클론
+3. **초록색 "Code" 버튼** 클릭 → **"Codespaces"** 탭 → **"Create codespace on main"**
+
+4. **브라우저에서 VS Code가 자동 실행됨** (약 2-3분 소요)
+
+5. **터미널에서 명령어 실행**:
+
+   ```bash
+   cd link-auto-click
+   python3 web_app.py
+   ```
+
+6. **포트 8080 자동 공개** → 링크 클릭하면 웹페이지 열림!
+
+7. **Excel 파일 업로드** → **자동화 실행** 🎉
+
+---
+
+### 🖥️ **방법 2: Vercel (링크 분석만)**
+
+**현재 링크**: https://excel-parsing-link.vercel.app/
+
+- ✅ **Excel 파일 분석**
+- ✅ **링크 추출 및 버튼 감지**
+- ❌ **실제 자동 클릭** (서버리스 제약)
+
+---
+
+## 🔧 **로컬 실행 (고급 사용자)**
+
+### 필수 조건
+
+- Python 3.9+
+- Chrome 브라우저
+- ChromeDriver
+
+### 설치 및 실행
 
 ```bash
+# 저장소 클론
 git clone https://github.com/wjdjdakf17/excelParsingLink.git
-cd excelParsingLink
-```
+cd excelParsingLink/link-auto-click
 
-### 2. 의존성 설치
-
-```bash
+# 패키지 설치
 pip install -r requirements.txt
+
+# Chrome Remote Debugging 모드 시작
+open -a "Google Chrome" --args --remote-debugging-port=9222
+
+# 웹앱 실행
+python3 web_app.py
 ```
 
-### 3. Chrome Driver 설정
+**브라우저에서 접속**: http://localhost:8080
 
-- [ChromeDriver 다운로드](https://chromedriver.chromium.org/)
-- `chromedriver-mac-arm64/chromedriver` 경로에 배치
+---
 
-### 4. 서버 실행
+## 🎯 **자동화 기능**
+
+### ✨ **지원 기능**
+
+- 📊 **Excel 파일 분석** (.xlsx, .xls)
+- 🔗 **링크 자동 추출**
+- 🤖 **자동 로그인** (ID: paranormal, PW: wotjd214!@)
+- 🎯 **스마트 버튼 클릭**
+- 📈 **실시간 진행 상황 모니터링**
+
+### 🎯 **타겟 버튼**
+
+- `#update_start` (ID)
+- 텍스트: "상품업데이트 & 마켓전송 시작"
+- 기타 일반적인 버튼 패턴
+
+---
+
+## 📱 **사용 방법**
+
+1. **Excel 파일 준비** (링크가 포함된 .xlsx 또는 .xls)
+2. **파일 업로드**
+3. **📊 링크 분석** 클릭
+4. **🚀 자동화 시작** 클릭
+5. **실시간 로그 확인**
+6. **완료까지 대기** ☕
+
+---
+
+## 🆘 **문제 해결**
+
+### Chrome 연결 오류
 
 ```bash
-python web_app.py
+# 기존 Chrome 프로세스 종료
+pkill -f "Google Chrome"
+
+# Chrome Remote Debugging 모드 재시작
+open -a "Google Chrome" --args --remote-debugging-port=9222 --user-data-dir=/tmp/chrome-remote-debug
 ```
 
-### 5. 브라우저에서 접속
-
-```
-http://localhost:8080
-```
-
-## 📖 사용법
-
-1. **📁 엑셀 파일 선택**: 링크가 포함된 엑셀 파일 업로드
-2. **📊 링크 분석**: "링크 분석" 버튼으로 모든 링크 추출
-3. **🎯 버튼 설정**: 클릭할 버튼 지정
-   - `#update_start` (ID로 찾기)
-   - `.btn` (클래스로 찾기)
-   - `button` (태그명으로 찾기)
-4. **🚀 자동화 시작**: 모든 링크에 자동으로 접속하여 버튼 클릭
-
-## 🎯 버튼 선택자 예시
-
-| 타입   | 예시            | 설명                        |
-| ------ | --------------- | --------------------------- |
-| ID     | `#update_start` | id="update_start"인 요소    |
-| 클래스 | `.defBtn`       | class="defBtn"인 요소       |
-| 태그   | `button`        | 모든 button 태그            |
-| 텍스트 | `text:시작`     | "시작" 텍스트를 포함한 요소 |
-
-## 📸 스크린샷
-
-![메인 화면](screenshot.png)
-
-## 🔒 주의사항
-
-- Chrome Driver가 시스템에 설치되어 있어야 합니다
-- 대량의 링크 처리 시 웹사이트 서버에 부하를 줄 수 있으니 적절한 딜레이를 설정해주세요
-- 자동화 대상 웹사이트의 이용약관을 확인해주세요
-
-## 🤝 기여하기
-
-1. Fork 하기
-2. Feature 브랜치 생성 (`git checkout -b feature/AmazingFeature`)
-3. 변경사항 커밋 (`git commit -m 'Add some AmazingFeature'`)
-4. 브랜치에 Push (`git push origin feature/AmazingFeature`)
-5. Pull Request 생성
-
-## 📄 라이선스
-
-이 프로젝트는 MIT 라이선스 하에 있습니다.
-
-## 🆘 문제 해결
-
-### Chrome Driver 오류
+### 패키지 설치 오류
 
 ```bash
-# macOS에서 권한 오류 시
-chmod +x chromedriver-mac-arm64/chromedriver
-```
+# Python 버전 확인
+python3 --version
 
-### 포트 충돌
-
-```bash
-# 다른 포트로 실행
-python web_app.py --port 9999
+# 패키지 재설치
+pip3 install --upgrade -r requirements.txt
 ```
 
 ---
 
-**💡 만든이**: 링크 자동화의 혁신을 꿈꾸는 개발자
+## 📋 **시스템 요구사항**
+
+### GitHub Codespaces
+
+- ✅ **무료** (월 120시간)
+- ✅ **브라우저만 있으면 됨**
+- ✅ **자동 환경 설정**
+- ✅ **외부 접속 자동 지원**
+
+### 로컬 환경
+
+- 🖥️ **macOS/Windows/Linux**
+- 🐍 **Python 3.9+**
+- 🌐 **Chrome 브라우저**
+- 🔧 **ChromeDriver**
+
+---
+
+## 🚀 **고급 기능**
+
+### 자동 로그인 설정
+
+- **기본 계정**: paranormal / wotjd214!@
+- **커스텀 설정**: `web_app.py` 파일에서 수정 가능
+
+### 버튼 선택자 커스터마이징
+
+```python
+# web_app.py 파일에서 수정
+button_selectors = [
+    "#update_start",
+    "button[class*='update']",
+    "input[value*='시작']"
+]
+```
+
+---
+
+## 📞 **지원**
+
+문제가 있으면 GitHub Issues에 올려주세요!
+
+- **GitHub Issues**: https://github.com/wjdjdakf17/excelParsingLink/issues
+
+---
