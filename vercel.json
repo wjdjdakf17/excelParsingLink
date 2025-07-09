@@ -14,10 +14,5 @@
   ],
   "env": {
     "PYTHONPATH": "."
-  },
-  "functions": {
-    "web_app.py": {
-      "maxDuration": 30
-    }
   }
 }
